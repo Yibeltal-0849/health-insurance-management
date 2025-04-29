@@ -11,6 +11,10 @@ const healthFacilityRoutes = require("./routes/healthFacilityRoutes");
 const customerFullInfoRoutes = require("./routes/customerRoutes");
 const familyRoutes = require("./routes/familyRoutes");
 const membershipRoutes = require("./routes/membershipRoute");
+const adminUserRoutes = require("./routes/adminUserRoutes");
+const regionalMgrRoutes = require("./routes/regionalMgrRoute");
+const zoneMgrRoutes = require("./routes/zoneMgrRoute");
+const woredaMgrRoutes = require("./routes/woredaMgrRoute");
 // Middlewares
 app.use(helmet());
 app.use(cors());
@@ -35,6 +39,18 @@ app.use("/api/customer", familyRoutes);
 
 // Pay for Membership
 app.use("/api", membershipRoutes);
+
+//middleware for admin user controller
+app.use("/api/admin/users", adminUserRoutes);
+
+//middleware for regional health officer
+app.use("/api/regional-health-officer/users", regionalMgrRoutes);
+
+//middleware for zone health officer
+app.use("/api/zone-health-officer/users", zoneMgrRoutes);
+
+//middleware for woreda health officer to manage user
+app.use("/api/woreda-health-officer/users", woredaMgrRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

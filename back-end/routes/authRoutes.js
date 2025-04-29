@@ -10,6 +10,7 @@ const {
 
   canRegisterZoneManager,
   canRegisterHospitalOfficer,
+  canRegisterHealthCenterOfficer,
 
   canRegisterWoredaManager,
 
@@ -48,6 +49,12 @@ router.post(
   "/woreda-managers/register",
   authenticate,
   canRegisterWoredaManager,
+  register
+);
+router.post(
+  "/health-care-officer/register",
+  authenticate,
+  canRegisterHealthCenterOfficer,
   register
 );
 

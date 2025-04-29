@@ -37,19 +37,30 @@ const authorizeRoles = (...allowedRoles) => {
 // 3. Specific permission helpers (optional but clean)
 const canRegisterRegion = authorizeRoles("admin");
 const canRegisterRegionalManager = authorizeRoles("admin");
+const canUpdateRegion = authorizeRoles("admin");
+const canDeleteRegion = authorizeRoles("admin");
+const canUpdateRegionalManager = authorizeRoles("admin");
+const canDeleteRegionalManager = authorizeRoles("admin");
 
 const canRegisterZone = authorizeRoles("regional_health_bureau");
 const canRegisterZoneManager = authorizeRoles("regional_health_bureau");
 const canRegisterHospital = authorizeRoles("regional_health_bureau");
 const canRegisterHospitalOfficer = authorizeRoles("regional_health_bureau");
+const canUpdateZoneManager = authorizeRoles("regional_health_bureau");
+const canDeleteZoneManager = authorizeRoles("regional_health_bureau");
 
 const canRegisterWoreda = authorizeRoles("zone_health_officer");
 const canRegisterHealthCenter = authorizeRoles("zone_health_officer");
+const canRegisterHealthCenterOfficer = authorizeRoles("zone_health_officer");
+const canUpdateWoredaManager = authorizeRoles("zone_health_officer");
+const canDeleteWoredaManager = authorizeRoles("zone_health_officer");
 
 const canRegisterWoredaManager = authorizeRoles("zone_health_officer");
 
 const canRegisterKebele = authorizeRoles("woreda_health_officer");
 const canRegisterKebeleOfficer = authorizeRoles("woreda_health_officer");
+const canUpdateKebeleOfficer = authorizeRoles("woreda_health_officer");
+const canDeleteKebeleOfficer = authorizeRoles("woreda_health_officer");
 
 const canRegisterCustomer = authorizeRoles("kebele_health_officer");
 const canRegisterFamilyMember = authorizeRoles("kebele_health_officer");
@@ -59,15 +70,24 @@ module.exports = {
   authorizeRoles,
   canRegisterRegion,
   canRegisterRegionalManager,
+  canUpdateRegionalManager,
+  canDeleteRegionalManager,
+  canUpdateZoneManager,
+  canDeleteZoneManager,
   canRegisterZone,
   canRegisterZoneManager,
   canRegisterHospital,
   canRegisterHospitalOfficer,
   canRegisterWoreda,
+  canUpdateWoredaManager,
+  canDeleteWoredaManager,
   canRegisterHealthCenter,
+  canRegisterHealthCenterOfficer,
   canRegisterWoredaManager,
   canRegisterKebele,
   canRegisterKebeleOfficer,
+  canUpdateKebeleOfficer,
+  canDeleteKebeleOfficer,
   canRegisterCustomer,
   canRegisterFamilyMember,
 };

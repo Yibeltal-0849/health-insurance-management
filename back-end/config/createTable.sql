@@ -40,14 +40,13 @@ CREATE TABLE health_facilities (
   zone_id INT,
   woreda_id INT,
   kebele_id INT,
-  created_by INT,
   status ENUM('active', 'inactive') DEFAULT 'active',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (region_id) REFERENCES regions(id),
   FOREIGN KEY (zone_id) REFERENCES zones(id),
   FOREIGN KEY (woreda_id) REFERENCES woredas(id),
-  FOREIGN KEY (kebele_id) REFERENCES kebeles(id),
-  FOREIGN KEY (created_by) REFERENCES users(id)  ---reject when you create this table and add this reference after user are created and recreate this table
+  FOREIGN KEY (kebele_id) REFERENCES kebeles(id)
+
 );
 
 -- 6. Users (needs kebele and health_facility optional)
@@ -59,7 +58,7 @@ CREATE TABLE users (
   email VARCHAR(100) UNIQUE,
   password VARCHAR(255) NOT NULL,
   health_facility_id INT,
-  role ENUM('admin','regional_health_bureau','hospital_health_officer','zone_health_officer','woreda_health_officer','customer','kebele_health_officer') NOT NULL,
+  role ENUM('admin','regional_health_bureau','hospital_health_officer','zone_health_officer','woreda_health_officer','customer','kebele_health_officer','healthCenter_officer') NOT NULL,
   kebele_id INT,
   status ENUM('active', 'inactive', 'pending') DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
