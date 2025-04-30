@@ -92,12 +92,14 @@ CREATE TABLE customers (
 --for payment to be membership to health insurance system
 CREATE TABLE membership_payments (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  customer_id INT,
-  amount DECIMAL(10,2),
-  payment_method ENUM('bank', 'mobile', 'cash'),
-  transaction_reference VARCHAR(100),
-  payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-  status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+  customer_id INT NOT NULL,
+  amount DECIMAL(10, 2) NOT NULL,
+  payment_method VARCHAR(50) NOT NULL,
+  transaction_reference VARCHAR(255) NOT NULL UNIQUE,
+  status VARCHAR(50) NOT NULL DEFAULT 'pending',
+  payment_date DATETIME NULL,
+  chapa_response JSON NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
