@@ -34,13 +34,17 @@ const authorizeRoles = (...allowedRoles) => {
   };
 };
 
-// 3. Specific permission helpers (optional but clean)
+// 3. Specific permission helpers
 const canRegisterRegion = authorizeRoles("admin");
 const canRegisterRegionalManager = authorizeRoles("admin");
 const canUpdateRegion = authorizeRoles("admin");
 const canDeleteRegion = authorizeRoles("admin");
 const canUpdateRegionalManager = authorizeRoles("admin");
 const canDeleteRegionalManager = authorizeRoles("admin");
+const canUpdateUserStatus = authorizeRoles("admin");
+const canGetUsersByRoleAndStatus = authorizeRoles("admin");
+const canGetTotalUsers = authorizeRoles("admin");
+const canGetPaymentReport = authorizeRoles("admin");
 
 const canRegisterZone = authorizeRoles("regional_health_bureau");
 const canRegisterZoneManager = authorizeRoles("regional_health_bureau");
@@ -68,26 +72,40 @@ const canRegisterFamilyMember = authorizeRoles("kebele_health_officer");
 module.exports = {
   authenticate,
   authorizeRoles,
+
+  //admin
   canRegisterRegion,
   canRegisterRegionalManager,
   canUpdateRegionalManager,
   canDeleteRegionalManager,
+  canUpdateUserStatus,
+  canGetUsersByRoleAndStatus,
+  canGetTotalUsers,
+  canGetPaymentReport,
+
+  //regional health officer
   canUpdateZoneManager,
   canDeleteZoneManager,
   canRegisterZone,
   canRegisterZoneManager,
   canRegisterHospital,
   canRegisterHospitalOfficer,
+
+  //zone health officer
   canRegisterWoreda,
   canUpdateWoredaManager,
   canDeleteWoredaManager,
   canRegisterHealthCenter,
   canRegisterHealthCenterOfficer,
   canRegisterWoredaManager,
+
+  //woreda health officer
   canRegisterKebele,
   canRegisterKebeleOfficer,
   canUpdateKebeleOfficer,
   canDeleteKebeleOfficer,
+
+  //kebele health officer
   canRegisterCustomer,
   canRegisterFamilyMember,
 };

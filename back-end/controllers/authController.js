@@ -13,6 +13,7 @@ const register = async (req, res) => {
     password,
     health_facility,
     role,
+    customer_type,
     kebele_id,
   } = req.body;
 
@@ -20,7 +21,7 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [rows] = await pool.execute(
-      "INSERT INTO users (username, first_name, last_name, email, password,health_facility_id, role, kebele_id, status) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO users (username, first_name, last_name, email, password,health_facility_id, role, customer_type,kebele_id, status) VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?)",
       [
         username,
         first_name,
@@ -29,8 +30,9 @@ const register = async (req, res) => {
         hashedPassword,
         health_facility || null,
         role,
+        customer_type || null,
         kebele_id || null,
-        "active",
+        "pending",
       ]
     );
 
@@ -174,13 +176,13 @@ const login = async (req, res) => {
         redirectPath = "no path";
     }
 
-    // Log successful login
-    await logUserAction(
+    // Log successful login, you can use later this part
+    /* await logUserAction(
       user.id,
       "login_success",
       `Login successful for ${email}`,
       req.ip
-    );
+    ); */
 
     res.json({
       message: "Login successful",

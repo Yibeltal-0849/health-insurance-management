@@ -16,6 +16,8 @@ const regionalMgrRoutes = require("./routes/regionalMgrRoute");
 const zoneMgrRoutes = require("./routes/zoneMgrRoute");
 const woredaMgrRoutes = require("./routes/woredaMgrRoute");
 const membershipPaymentRoute = require("./routes/membershipPaymentRoute");
+const usersUpdateRoute = require("./routes/usersUpdateRoute");
+const kebelePaidForFreeUserRoute = require("./routes/kebeleMgrRoute");
 // Middlewares
 app.use(helmet());
 app.use(cors());
@@ -38,11 +40,14 @@ app.use("/api/customer", customerFullInfoRoutes);
 //middleware for family
 app.use("/api/customer", familyRoutes);
 
-// Pay for Membership
+//  pay for Membership
 app.use("/api", membershipRoutes);
 
 //middleware for admin user controller
 app.use("/api/admin/users", adminUserRoutes);
+
+//middleware for user information
+app.use("/api/admin", adminUserRoutes);
 
 //middleware for regional health officer
 app.use("/api/regional-health-officer/users", regionalMgrRoutes);
@@ -55,6 +60,12 @@ app.use("/api/woreda-health-officer/users", woredaMgrRoutes);
 
 //middleware for pay money to be membership on health insurance management system
 app.use("/api/payment", membershipPaymentRoute);
+
+//kebele pay for free user
+app.use("/api/payment", kebelePaidForFreeUserRoute);
+
+//middleware for update user
+app.use("/api/users", usersUpdateRoute);
 
 // Health check endpoint
 app.get("/health", (req, res) => {

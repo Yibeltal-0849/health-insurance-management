@@ -25,9 +25,8 @@ const registerCustomer = async (req, res) => {
       `
      INSERT INTO customers (
   user_id, kebele_id, first_name, last_name, gender, date_of_birth, age,
-  family_size, phone_number, insurance_status, is_member,
-  membership_expiry_date, photo
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  family_size, phone_number, insurance_status, is_member, photo
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         user_id,
@@ -41,7 +40,6 @@ const registerCustomer = async (req, res) => {
         phone_number,
         insurance_status || "inactive",
         is_member,
-        membership_expiry_date,
         photoPath,
       ]
     );

@@ -1,14 +1,18 @@
 const express = require("express");
 const { authenticate } = require("../middlewares/authMiddleware");
 const {
-  initiateChapaPayment,
+  initiateChapaPaymentForFreeUser,
   handleChapaCallback,
   verifyPaymentStatus,
 } = require("../controllers/membershipPaymentsController");
 
 const router = express.Router();
 
-router.post("/chapa/initiate", authenticate, initiateChapaPayment);
+router.post(
+  "/chapa/initiate-free-user",
+  authenticate,
+  initiateChapaPaymentForFreeUser
+);
 
 router.get("/chapa/callback", handleChapaCallback); // Chapa uses GET!
 

@@ -57,6 +57,7 @@ CREATE TABLE users (
   last_name VARCHAR(100),
   email VARCHAR(100) UNIQUE,
   password VARCHAR(255) NOT NULL,
+  customer_type ENUM('free', 'paid') DEFAULT NULL,
   health_facility_id INT,
   role ENUM('admin','regional_health_bureau','hospital_health_officer','zone_health_officer','woreda_health_officer','customer','kebele_health_officer','healthCenter_officer') NOT NULL,
   kebele_id INT,
@@ -66,6 +67,7 @@ CREATE TABLE users (
   FOREIGN KEY (kebele_id) REFERENCES kebeles(id),
   FOREIGN KEY (health_facility_id) REFERENCES health_facilities(id)
 );
+
 
 -- 7. Customers (depends on users and kebeles)
 CREATE TABLE customers (
@@ -81,7 +83,6 @@ CREATE TABLE customers (
   phone_number VARCHAR(20),
   insurance_status ENUM('active', 'inactive', 'suspended') DEFAULT 'inactive',
   is_member BOOLEAN DEFAULT false,
-  membership_expiry_date DATE,
   photo VARCHAR(255),                 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -98,6 +99,7 @@ CREATE TABLE membership_payments (
   transaction_reference VARCHAR(255) NOT NULL UNIQUE,
   status VARCHAR(50) NOT NULL DEFAULT 'pending',
   payment_date DATETIME NULL,
+  expired_date DATETIME NULL,
   chapa_response JSON NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES customers(id)
@@ -192,3 +194,31 @@ INSERT INTO `users` (
   '$2b$12$4QR2XPgKez6EWnFvuaUTROTaKzG.y1WSHYE/kw4C2WX/L022cdlVi',
   'admin', NULL, 'active', NOW(), NOW()
 );
+
+
+
+/* DELIMITER $$
+
+CREATE TRIGGER update_family_insurance_status
+AFTER UPDATE ON membership_payments
+FOR EACH ROW
+BEGIN
+  IF NEW.status = 'completed' THEN
+    UPDATE family_members
+    SET insurance_status = 'active'
+    WHERE customer_id = NEW.customer_id;
+  END IF;
+END$$
+
+DELIMITER ;*/
+
+
+---This trigger is stored in the database and will automatically run every time an UPDATE is made to the membership_payments table where the status becomes 'completed'.
+
+/*
+Steps in phpMyAdmin:
+Select your database.
+Click on the SQL tab.
+Paste the trigger code.
+Click Go
+*/
