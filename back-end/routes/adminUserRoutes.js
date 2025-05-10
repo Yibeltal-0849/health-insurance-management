@@ -7,6 +7,7 @@ const {
   getUsersByRoleAndStatus,
   getUserStatus,
   getPaymentReport,
+  getTotalIncomeByCustomerType,
 } = require("../controllers/userController");
 const {
   authenticate,
@@ -45,4 +46,6 @@ router.get(
 //payment report
 router.get("/payments", authenticate, canGetPaymentReport, getPaymentReport);
 
+// total income from paid and free user
+router.get("/payment/total-income", authenticate, getTotalIncomeByCustomerType);
 module.exports = router;

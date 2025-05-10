@@ -240,6 +240,72 @@ const getPaymentReport = async (request, response) => {
   }
 };
 
+// Define an asynchronous function to handle the route for getting total income by customer type
+const getTotalIncomeByCustomerType = async (req, res) => {
+  // Create a connection to the database
+  const connection = await db.getConnection();
+
+  try {
+    // Execute a SQL query to get the total amount paid by users, grouped by their customer type
+    // This joins membership_payments with customers and users tables
+    // Only completed payments are considered
+    const [results] = await connection.execute(`
+ -- Select the type of customer (e.g., 'free' or 'paid')
+SELECT 
+    users.customer_type,
+
+    -- Sum all payment amounts for each customer type; return 0 if no payments exist
+    COALESCE(SUM(membership_payments.amount), 0) AS total_income
+
+-- Use the membership_payments table as the main source of data
+FROM membership_payments
+
+-- Join with the customers table to get the customer associated with each payment
+JOIN customers ON membership_payments.customer_id = customers.id
+
+-- Join with the users table to get the customer type (from the user who owns the customer record)
+JOIN users ON customers.user_id = users.id
+
+-- Only include payments that have been successfully completed
+WHERE membership_payments.status = 'completed'
+
+-- Group the results by customer type so the total is calculated separately for 'free' and 'paid' users
+GROUP BY users.customer_type
+
+`);
+
+    // Initialize an object to store total income for paid and free users
+    const incomeData = {
+      paid_users_income: 0,
+      free_users_income: 0,
+    };
+
+    // Loop through the query results
+    results.forEach((row) => {
+      // If the customer type is 'paid', assign the total income to paid_users_income
+      if (row.customer_type === "paid") {
+        incomeData.paid_users_income = row.total_income;
+      }
+      // If the customer type is 'free', assign the total income to free_users_income
+      else if (row.customer_type === "free") {
+        incomeData.free_users_income = row.total_income;
+      }
+    });
+
+    // Send a successful HTTP response with the income data as JSON
+    res.status(200).json(incomeData);
+  } catch (error) {
+    // If an error occurs, log it to the console
+    console.error("Error in getTotalIncomeByCustomerType:", error.message);
+
+    // Send an HTTP response indicating a server error
+    res.status(500).json({ error: "Failed to fetch income data" });
+  } finally {
+    // Release the database connection whether or not there was an error
+    connection.release();
+  }
+};
+
 module.exports = {
   updateUser,
   deleteUser,
@@ -247,4 +313,5 @@ module.exports = {
   getUsersByRoleAndStatus,
   getUserStatus,
   getPaymentReport,
+  getTotalIncomeByCustomerType,
 };
