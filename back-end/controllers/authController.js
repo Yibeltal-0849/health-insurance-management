@@ -3,8 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { logUserAction } = require("../helpers/logHelper");
 
-// Register User
-const register = async (req, res) => {
+// Register User not location based
+/* const register = async (req, res) => {
   const {
     username,
     first_name,
@@ -39,6 +39,101 @@ const register = async (req, res) => {
     res
       .status(201)
       .json({ message: "User registered successfully", userId: rows.insertId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error registering user" });
+  }
+}; */
+
+//
+
+const register = async (req, res) => {
+  const {
+    username,
+    first_name,
+    last_name,
+    email,
+    password,
+    health_facility,
+    role,
+    customer_type,
+    sub_city_id,
+    kebele_id,
+    woreda_id,
+    zone_id,
+    region_id,
+  } = req.body;
+
+  try {
+    // Role-based validation for required IDs
+    if (role === "regional_health_bureau" && !region_id) {
+      return res
+        .status(400)
+        .json({ message: "Region ID is required for regional health officer" });
+    }
+    if (role === "SubCity_health_officer" && !sub_city_id) {
+      return res
+        .status(400)
+        .json({
+          message: "sub city ID is required for federal subCity health officer",
+        });
+    }
+    if (role == "SubCity_health_officer" && !sub_city_id) {
+      return res.status().json({
+        message: "sub city ID is required for sub city health officer",
+      });
+    }
+    if (role == "federal_woreda_health_officer" && !federal_woreda_id) {
+      return res.status().json({
+        message: "federal woreda id is required for federal woreda health ",
+      });
+    }
+    if (role === "zone_health_officer" && !zone_id) {
+      return res.status(400).json({
+        message: "Zone ID are required for zone health officer",
+      });
+    }
+    if (role === "woreda_health_officer" && !woreda_id) {
+      return res.status(400).json({
+        message: "Woreda ID are required for woreda health officer",
+      });
+    }
+    if (role === "kebele_health_officer" && !kebele_id) {
+      return res.status(400).json({
+        message: "Kebele ID are required for kebele health officer",
+      });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert the user into the database
+    const [rows] = await pool.execute(
+      `INSERT INTO users 
+        (username, first_name, last_name, email, password, health_facility_id, role, customer_type,sub_city_id, kebele_id, woreda_id, zone_id, region_id, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`,
+      [
+        username,
+        first_name,
+        last_name,
+        email,
+        hashedPassword,
+        health_facility || null,
+        role,
+        customer_type || null,
+        sub_city_id || null,
+        kebele_id || null,
+        woreda_id || null,
+        zone_id || null,
+        region_id || null,
+        "pending",
+      ]
+    );
+
+    res.status(201).json({
+      message: "User registered successfully",
+      userId: rows.insertId,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error registering user" });

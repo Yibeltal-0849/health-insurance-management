@@ -3,6 +3,7 @@ const router = express.Router();
 
 //register location
 const {
+  registerSubCity,
   createRegion,
   createZone,
   createWoreda,
@@ -18,6 +19,8 @@ const {
 } = require("../middlewares/authMiddleware");
 
 // Routes
+
+router.post("/sub-cities/register", authenticate, registerSubCity);
 router.post("/regions/register", authenticate, canRegisterRegion, createRegion);
 router.post("/zones/register", authenticate, canRegisterZone, createZone);
 router.post("/woredas/register", authenticate, canRegisterWoreda, createWoreda);

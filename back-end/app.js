@@ -12,6 +12,7 @@ const customerFullInfoRoutes = require("./routes/customerRoutes");
 const familyRoutes = require("./routes/familyRoutes");
 const membershipRoutes = require("./routes/membershipRoute");
 const adminUserRoutes = require("./routes/adminUserRoutes");
+const subCityMgr = require("./routes/SubCityMgrRoute");
 const regionalMgrRoutes = require("./routes/regionalMgrRoute");
 const zoneMgrRoutes = require("./routes/zoneMgrRoute");
 const woredaMgrRoutes = require("./routes/woredaMgrRoute");
@@ -30,7 +31,7 @@ app.use("/api/auth", authRoutes);
 
 // middleware for location route
 app.use("/api/location", locationRoutes);
-
+app.use("/api/location", subCityMgr);
 //middleware for health facility
 app.use("/api", healthFacilityRoutes);
 
@@ -54,9 +55,13 @@ app.use("/api/regional-health-officer/users", regionalMgrRoutes);
 
 //middleware for zone health officer
 app.use("/api/zone-health-officer/users", zoneMgrRoutes);
+app.use("/api", zoneMgrRoutes);
 
 //middleware for woreda health officer to manage user
 app.use("/api/woreda-health-officer/users", woredaMgrRoutes);
+
+//middleware for sub city health officer and sub city woreda health officer
+app.use("/api", subCityMgr);
 
 //middleware for pay money to be membership on health insurance management system
 app.use("/api/payment", membershipPaymentRoute);
@@ -76,7 +81,7 @@ app.get("/health", (req, res) => {
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
-    message: "Not Found",
+    message: "Rout is Not Found",
   });
 });
 

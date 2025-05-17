@@ -68,6 +68,8 @@ router.post(
 //register role based customers
 router.post("/customers/register", authenticate, canRegisterCustomer, register);
 
+router.post("/subCity-manager/register", authenticate, register);
+
 //regular user login route
 router.post("/login", login);
 

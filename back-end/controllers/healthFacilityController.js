@@ -5,27 +5,27 @@ exports.createHealthCenter = async (req, res) => {
   const {
     name,
     type,
+    sub_city_id,
     region_id,
     zone_id,
     woreda_id,
     kebele_id,
-    created_by, // can be hardcoded or fetched from logged-in user
     status, // optional
   } = req.body;
 
   try {
     const [result] = await db.execute(
       `INSERT INTO health_facilities 
-      (name, type, region_id, zone_id, woreda_id, kebele_id, created_by, status) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      (name, type,sub_city_id, region_id, zone_id, woreda_id, kebele_id, status) 
+      VALUES (?, ?, ?, ?, ?, ?,?, ?)`,
       [
         name,
         type,
-        region_id,
-        zone_id,
-        woreda_id,
-        kebele_id,
-        created_by,
+        sub_city_id || null,
+        region_id || null,
+        zone_id || null,
+        woreda_id || null,
+        kebele_id || null,
         status || "active",
       ]
     );
@@ -42,28 +42,28 @@ exports.createHospital = async (req, res) => {
   const {
     name,
     type,
-    region_id,
-    zone_id,
-    woreda_id,
-    kebele_id,
-    created_by, 
-    status, 
+    sub_city_id = null,
+    region_id = null,
+    zone_id = null,
+    woreda_id = null,
+    kebele_id = null,
+    status = "active",
   } = req.body;
 
   try {
     const [result] = await db.execute(
       `INSERT INTO health_facilities 
-      (name, type, region_id, zone_id, woreda_id, kebele_id, created_by, status) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      (name, type,sub_city_id, region_id, zone_id, woreda_id, kebele_id, status) 
+      VALUES (?, ?, ?, ?,?, ?, ?, ?)`,
       [
         name,
         type,
+        sub_city_id,
         region_id,
         zone_id,
         woreda_id,
         kebele_id,
-        created_by,
-        status || "active",
+        status,
       ]
     );
 

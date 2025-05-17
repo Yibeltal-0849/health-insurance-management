@@ -1,3 +1,10 @@
+--federal sub city 
+CREATE TABLE sub_cities (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 1. Regions (top-level)
 CREATE TABLE regions (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +25,10 @@ CREATE TABLE woredas (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   zone_id INT,
-  FOREIGN KEY (zone_id) REFERENCES zones(id)
+  sub_city_id INT,
+  FOREIGN KEY (zone_id) REFERENCES zones(id),
+  FOREIGN key(sub_city_id) REFERENCES sub_cities(id)
+  
 );
 
 -- 4. Kebeles (depends on woredas)
@@ -57,15 +67,51 @@ CREATE TABLE users (
   last_name VARCHAR(100),
   email VARCHAR(100) UNIQUE,
   password VARCHAR(255) NOT NULL,
-  customer_type ENUM('free', 'paid') DEFAULT NULL,
   health_facility_id INT,
-  role ENUM('admin','regional_health_bureau','hospital_health_officer','zone_health_officer','woreda_health_officer','customer','kebele_health_officer','healthCenter_officer') NOT NULL,
+  role ENUM(
+    'admin',
+    'regional_health_bureau',
+    'SubCity_health_officer',
+    'woreda_health_officer',
+    'hospital_health_officer',
+    'zone_health_officer',
+    'woreda_health_officer',  
+    'customer',
+    'kebele_health_officer',
+    'healthCenter_officer'
+  ) NOT NULL,
+   customer_type ENUM('free', 'paid') DEFAULT NULL,
+  region_id INT,
+  zone_id INT,
+  woreda_id INT,
+  kebele_id INT,
+
+  status ENUM('active', 'inactive', 'pending') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (health_facility_id) REFERENCES health_facilities(id),
+  FOREIGN KEY (region_id) REFERENCES regions(id),
+  FOREIGN KEY (zone_id) REFERENCES zones(id),
+  FOREIGN KEY (woreda_id) REFERENCES woredas(id),
+  FOREIGN KEY (kebele_id) REFERENCES kebeles(id)
+);
+
+-- Location references for access control
+  region_id INT,
+  zone_id INT,
+  woreda_id INT,
   kebele_id INT,
   status ENUM('active', 'inactive', 'pending') DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (kebele_id) REFERENCES kebeles(id),
-  FOREIGN KEY (health_facility_id) REFERENCES health_facilities(id)
+ 
+    -- Foreign Keys
+  FOREIGN KEY (health_facility_id) REFERENCES health_facilities(id),
+  FOREIGN KEY (region_id) REFERENCES regions(id),
+  FOREIGN KEY (zone_id) REFERENCES zones(id),
+  FOREIGN KEY (woreda_id) REFERENCES woredas(id),
+  FOREIGN KEY (kebele_id) REFERENCES kebeles(id)
 );
 
 
