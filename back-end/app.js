@@ -19,6 +19,7 @@ const woredaMgrRoutes = require("./routes/woredaMgrRoute");
 const membershipPaymentRoute = require("./routes/membershipPaymentRoute");
 const usersUpdateRoute = require("./routes/usersUpdateRoute");
 const kebelePaidForFreeUserRoute = require("./routes/kebeleMgrRoute");
+const subCityWoredaRoute = require("./routes/subCityWoredaMgrRoute");
 // Middlewares
 app.use(helmet());
 app.use(cors());
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // middleware for regular user
 app.use("/api/auth", authRoutes);
+app.use("/api/auth", subCityWoredaRoute);
 
 // middleware for location route
 app.use("/api/location", locationRoutes);
@@ -51,7 +53,7 @@ app.use("/api/admin/users", adminUserRoutes);
 app.use("/api/admin", adminUserRoutes);
 
 //middleware for regional health officer
-app.use("/api/regional-health-officer/users", regionalMgrRoutes);
+app.use("/api", regionalMgrRoutes);
 
 //middleware for zone health officer
 app.use("/api/zone-health-officer/users", zoneMgrRoutes);

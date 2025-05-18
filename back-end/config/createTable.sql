@@ -36,9 +36,13 @@ CREATE TABLE kebeles (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   code VARCHAR(50) UNIQUE,
+  region_id INT,
+  zone_id INT,
   woreda_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (woreda_id) REFERENCES woredas(id)
+  FOREIGN KEY (region_id) REFERENCES regions(id),
+  FOREIGN KEY (zone_id) REFERENCES zones(id),
+  FOREIGN KEY (worda_id) REFERENCES woredas(id)
 );
 
 -- 5. Health Facilities (needs region, zone, woreda, kebele)
@@ -97,29 +101,13 @@ CREATE TABLE users (
   FOREIGN KEY (kebele_id) REFERENCES kebeles(id)
 );
 
--- Location references for access control
-  region_id INT,
-  zone_id INT,
-  woreda_id INT,
-  kebele_id INT,
-  status ENUM('active', 'inactive', 'pending') DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- 
-    -- Foreign Keys
-  FOREIGN KEY (health_facility_id) REFERENCES health_facilities(id),
-  FOREIGN KEY (region_id) REFERENCES regions(id),
-  FOREIGN KEY (zone_id) REFERENCES zones(id),
-  FOREIGN KEY (woreda_id) REFERENCES woredas(id),
-  FOREIGN KEY (kebele_id) REFERENCES kebeles(id)
-);
-
 
 -- 7. Customers (depends on users and kebeles)
 CREATE TABLE customers (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
-  kebele_id INT NOT NULL,
+  kebele_id INT,
+  woreda_id INT,
   first_name VARCHAR(100),
   last_name VARCHAR(100),
   date_of_birth DATE,
@@ -133,7 +121,8 @@ CREATE TABLE customers (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (kebele_id) REFERENCES kebeles(id)
+  FOREIGN KEY (kebele_id) REFERENCES kebeles(id),
+  FOREIGN KEY (woreda_id) REFERENCES woreda_id(id)
 );
 
 --for payment to be membership to health insurance system

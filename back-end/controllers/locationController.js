@@ -71,11 +71,18 @@ const createWoreda = async (req, res) => {
 
 // Register Kebele
 const createKebele = async (req, res) => {
-  const { name, code, woreda_id } = req.body;
+  const {
+    name,
+    code,
+    region_id = null,
+    zone_id = null,
+    woreda_id = null,
+  } = req.body;
+
   try {
     const [result] = await db.execute(
-      "INSERT INTO kebeles (name, code, woreda_id) VALUES (?, ?, ?)",
-      [name, code, woreda_id]
+      "INSERT INTO kebeles (name, code,region_id,zone_id, woreda_id) VALUES (?, ?,?,?, ?)",
+      [name, code, region_id, zone_id, woreda_id]
     );
     res
       .status(201)

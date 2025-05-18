@@ -5,7 +5,8 @@ const registerCustomer = async (req, res) => {
   try {
     const {
       user_id,
-      kebele_id,
+      kebele_id = null,
+      woreda_id = null,
       first_name,
       last_name,
       date_of_birth,
@@ -14,7 +15,6 @@ const registerCustomer = async (req, res) => {
       phone_number,
       insurance_status,
       is_member,
-      membership_expiry_date,
     } = req.body;
 
     const age = calculateAge(date_of_birth); //calculate age automatic
@@ -24,13 +24,14 @@ const registerCustomer = async (req, res) => {
     const [result] = await db.execute(
       `
      INSERT INTO customers (
-  user_id, kebele_id, first_name, last_name, gender, date_of_birth, age,
+  user_id, kebele_id, woreda_id,first_name, last_name, gender, date_of_birth, age,
   family_size, phone_number, insurance_status, is_member, photo
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
         user_id,
-        kebele_id,
+        kebele_id || null,
+        woreda_id || null,
         first_name,
         last_name,
         gender,
