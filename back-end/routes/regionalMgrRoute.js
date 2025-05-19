@@ -36,9 +36,13 @@ router.post(
 );
 
 //register regional hospital health officer
-router.post("/regional-hospital-health-officer", authenticate, register);
+router.post(
+  "/regional-hospital-health-officer/register",
+  authenticate,
+  register
+);
 
 //register regional kebele health officer
-router.post("/regional-kebele-health-officer", authenticate, register);
+router.post("/regional-kebele-health-officer/register", authenticate, register);
 
 module.exports = router;

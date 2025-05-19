@@ -56,7 +56,7 @@ app.use("/api/admin", adminUserRoutes);
 app.use("/api", regionalMgrRoutes);
 
 //middleware for zone health officer
-app.use("/api/zone-health-officer/users", zoneMgrRoutes);
+// app.use("/api/zone-health-officer/users", zoneMgrRoutes);
 app.use("/api", zoneMgrRoutes);
 
 //middleware for woreda health officer to manage user

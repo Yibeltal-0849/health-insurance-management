@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { register } = require("../controllers/authController");
 const { updateUser, deleteUser } = require("../controllers/userController");
+
 const {
   authenticate,
   canUpdateWoredaManager,
@@ -14,6 +15,7 @@ const {
   canRegisterHealthCenter,
   canRegisterHospital,
 } = require("../middlewares/authMiddleware");
+const { createKebele } = require("../controllers/locationController");
 
 // Update user
 router.put("/:id", authenticate, canUpdateWoredaManager, updateUser);
@@ -29,6 +31,9 @@ router.post(
   healthFacilityController.createHealthCenter
 );
 
+//register health center officer
+router.post("/zone-health-center-officer/register", authenticate, register);
+
 //register zone's hospital
 router.post(
   "/zone-hospital/register",
@@ -36,7 +41,14 @@ router.post(
   healthFacilityController.createHospital
 );
 //register zone's health officer for each hospital found in zone
-router.post("/register", authenticate, register);
+router.post(
+  "/zone-hospital-health-center-officer/register",
+  authenticate,
+  register
+);
 
+router.post("/zone-kebele/register", authenticate, createKebele);
+
+router.post("/zone-kebele-health-officer/register", authenticate, register);
 
 module.exports = router;
